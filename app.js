@@ -1,23 +1,28 @@
-const { app, BrowserWindow } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  Menu,
+  MenuItemConstructorOptions
+} = require('electron');
 const fs = require("fs");
 
 //https://ourcodeworld.com/articles/read/524/how-to-use-live-reload-in-your-electron-project
 // Enable live reload for Electron too
 require('electron-reload')(__dirname, {
-    // Note that the path to electron may vary according to the main file
-    electron: require(`${__dirname}/node_modules/electron`)
+  // Note that the path to electron may vary according to the main file
+  electron: require(`${__dirname}/node_modules/electron`)
 });
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 
-function createWindow () {
+function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     width: 800,
     height: 600,
-    resizable: true,
+    frame: false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -25,10 +30,6 @@ function createWindow () {
 
   // and load the index.html of the app.
   win.loadFile('index.html')
-
-  //Remove the menu bar created by default
-  //https://discuss.atom.io/t/how-to-disable-the-default-menubar/17722/4
-  win.setMenu(null);
 
   // Open the DevTools.
   win.webContents.openDevTools()
@@ -66,7 +67,7 @@ app.on('activate', () => {
 
 //This is a function that can be called from the renderer
 exports.getThingsToInstall = () => {
-  
+
   var data = fs.readFileSync('input.txt');
   console.log("Synchronous read: " + data.toString());
 
@@ -77,3 +78,94 @@ exports.getThingsToInstall = () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
+
+var template = [{
+    label: 'File',
+    submenu: [{
+        label: 'Open',
+        accelerator: 'Ctrl+O'
+      },
+      {
+        label: 'Save',
+        accelerator: 'Ctrl+S'
+      },
+      {
+        label: 'Save As...',
+        accelerator: 'Ctrl+Shift+S'
+      }
+    ]
+  },
+  {
+    label: 'Edit',
+    submenu: [{
+        role: 'undo'
+      },
+      {
+        role: 'redo'
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'cut'
+      },
+      {
+        role: 'copy'
+      },
+      {
+        role: 'paste'
+      },
+      {
+        type: 'separator'
+      },
+      // {
+      //   role: 'delete'
+      // },
+      {
+        role: 'selectall'
+      }
+    ]
+  },
+  {
+    label: 'View',
+    submenu: [{
+        role: 'reload'
+      },
+      {
+        role: 'forcereload'
+      },
+      {
+        role: 'toggledevtools'
+      },
+      // {
+      //   type: 'separator'
+      // },
+      // {
+      //   role: 'resetzoom'
+      // },
+      // {
+      //   role: 'zoomin'
+      // },
+      // {
+      //   role: 'zoomout'
+      // },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'togglefullscreen'
+      }
+    ]
+  },
+  {
+    role: 'help',
+    submenu: [{
+      label: 'Learn More',
+      click: function () {
+        require('electron').shell.openExternal('https://electronjs.org');
+      }
+    }]
+  }
+];
+
+Menu.setApplicationMenu(Menu.buildFromTemplate(template));
