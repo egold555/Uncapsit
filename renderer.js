@@ -1,13 +1,16 @@
 const Tag = require("en-pos").Tag;
 
-var words_with_capital_first_letter = {
-    "i": "I",
-    "i'll": "I'll",
-    "i've": "I've",
-    "i'd": "I'd",
-    "i'm": "I'm",
-    "earth": "Earth"
-};
+const fs = require("fs");
+
+var namesTxt = undefined;
+
+function loadNamesTXTIntoMemory() {
+    if (namesTxt == undefined) {
+        var data = fs.readFileSync('assets/docs/names.txt');
+        namesTxt = data.toString().replace('[^a-zA-Z]', '').split(/[\r\n]+/); //remove anything but a-z A-Z and split / remove every type of line break
+        console.log("Size: " + namesTxt.length);
+    }
+}
 
 String.prototype.toSentenceCase = function () {
     var str;
@@ -25,6 +28,7 @@ String.prototype.capitalize = function () {
 };
 
 $("#inputbox").on('change keyup paste', function () {
+    loadNamesTXTIntoMemory();
     var box = $('#inputbox');
     var text = box.val();
     text = text.replace('\t', '')
@@ -153,6 +157,33 @@ $("#inputbox").on('change keyup paste', function () {
             text = text.replace(" " + word + " ", " " + fixedWord + " ");
 
             console.log("Found: " + word + " | " + fixedWord)
+        }
+
+    }
+
+    for(var nameIndex in namesTxt){
+        var name = namesTxt[nameIndex];
+        var nameLowercase = name.toLowerCase();
+
+        if(name == " " || name == "" || name === " " || name === ""){
+            continue;
+        }
+
+        for (var i = 0; i < theArray.length; i++) {
+            var word = theArray[i].toLowerCase();
+            //console.log("Trying name: \"" + nameLowercase + "\" for word " + word)
+            
+            if(word == " " || word == "" || word === " " || word === ""){
+                continue;
+            }
+
+            if(word == nameLowercase || word === nameLowercase){
+
+                
+
+                text = text.replace(" " + word + " ", " " + name + " ");
+                console.log("Found name: " + word + " | " + nameLowercase)
+            }
         }
 
     }
