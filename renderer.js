@@ -1,14 +1,5 @@
 const Tag = require("en-pos").Tag;
 
-var words_with_capital_first_letter = {
-    "i": "I",
-    "i'll": "I'll",
-    "i've": "I've",
-    "i'd": "I'd",
-    "i'm": "I'm",
-    "earth": "Earth"
-};
-
 String.prototype.toSentenceCase = function () {
     var str;
     var rg = /(^\w{1}|(\.|\?|!)\s+\w{1})/gi;
@@ -29,9 +20,7 @@ $("#inputbox").on('change keyup paste', function () {
     var text = box.val();
     text = text.replace('\t', '')
     text = text.toSentenceCase();
-    // $.each(words_with_capital_first_letter, function (key, value) {
-    //     text = text.replace(" " + key + " ", " " + value + " ").replace(" " + key + ".", " " + value + ".").replace(" " + key + "!", " " + value + "!").replace(" " + key + "?", " " + value + "?").replace(" " + key + "\"", " " + value + "\"");
-    // });
+
 
     var textNew = text.replace('/\W+/', ' '); //CHANGES WHITESPACES TO SPACE
     textNew = textNew.replace(/\n/g, ' '); //REMOVE NEWLINES AND MAKE THEM SPACE
