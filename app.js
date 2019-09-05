@@ -158,6 +158,25 @@ var template = [{
     ]
   },
   {
+    label: 'Options',
+    submenu: [{
+      label: 'Theme',
+      submenu: [{
+
+          label: 'Light',
+          type: 'checkbox',
+          checked: true
+        },
+        {
+          label: 'Dark',
+          type: 'checkbox',
+          checked: true
+
+        }
+      ]
+    }]
+  },
+  {
     role: 'help',
     submenu: [{
       label: 'Learn More',
